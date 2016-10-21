@@ -15,7 +15,7 @@ var Toolbar = React.createClass({
   render: function() {
     return (
       <div id="Toolbar">
-        <h1>CSS AST Explorer</h1>
+        <h1>BEM Validator</h1>
         <button
           type="button"
           disabled={

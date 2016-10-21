@@ -27,6 +27,7 @@ var PropertyList = React.createClass({
           name={key}
           focusPath={focusPath}
           deepOpen={this.props.deepOpen}
+          focusError={this.props.focusError}
           value={v}
           level={level}
         />

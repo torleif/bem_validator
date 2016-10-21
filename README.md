@@ -1,4 +1,8 @@
-## A CSS AST explorer
+## BEM (Block Element Modifier) Validation Service.
+
+**This is a fork of @iamdustan’s [iamdustan’s AST explorer](https://github.com/iamdustan/reworkcss_ast_explorer)**
+
+which is forked from
 
 **This is a fork of @fkling’s [Esprima AST Explorer](https://github.com/fkling/esprima_ast_explorer)**
 
@@ -9,6 +13,7 @@ parse the code.
 
 ### Features
 
+- Validate BEM CSS
 - Save and fork code snippets. Copy the URL to share them.
 - Copying an AST or dropping a file containing an AST into the window will
 parse the AST and update the code using [css](https://github.com/reworkcss/css).
@@ -17,9 +22,7 @@ you can drag and drop CSS files).
 - shift+click on a node expands the full subtree.
 - Hovering over a node highlights the corresponding text in the source code:
 ![source highlight](assets/source.png)
-- Editing the source or moving the cursor around will automatically highlight the
-corresponding AST node (or its ancestors of it isn't expanded):
-![source highlight](assets/ast.png)
+
 
 ### Contributions
 

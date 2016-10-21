@@ -1,0 +1,60 @@
+/**
+*
+* Testing file for BEM validator.
+* 
+* Todo: clarification regarding CSS selectors: http://www.w3schools.com/cssref/css_selectors.asp
+* note the crazy classes https://mathiasbynens.be/demo/crazy-class
+*
+*/
+
+
+/** 
+ Good BEM 
+ */
+.block { color: #042; }
+.block__elem { color: #042; }
+.block--hidden { }
+/* To alter elements based on a block-level modifier */
+.block--mod .block__elem { }
+/* Element modifier */
+.block__elem--mod { }
+.block-next, .block-nexttwo { color: #042; }
+.table-zerbra tr:nth-child(2n+1) { background-color: #eee; }
+
+/**
+ BAD invalid BEM
+ */
+.block .block__elem { color: #042; }
+div.block__elem { color: #042; }
+.? { color: #042; }
+body { color: red;} 
+#HelloWorld { color: red; }
+div#Helloworld { color: blue; }
+a[target=_blank] { color: gray }
+[input=date] { color: black }
+.block--badmod div.block__badelem { }
+.block__elem--modifier--modifier { }
+
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  background: red;
+  font-size: 18px;
+}
+
+p {
+  color: purple !important;
+}
+
+@media screen and (min-width: 600px) {
+  body {
+    background: green;
+    font-size: 21px;
+  }
+  /* this should be valid */
+  .block--mobiletest { }
+}
+

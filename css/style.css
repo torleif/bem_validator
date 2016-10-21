@@ -97,11 +97,24 @@ html {
 #Error {
   position: absolute;
   z-index: 100;
-  top: 0;
+  top: 36px;
   left: 0;
   right: 0;
   background-color: #C00;
   color: white;
+  text-align: center;
+  height: 35px;
+  line-height: 35px;
+  font-family: Verdana, non-serif;
+}
+#Issue {
+  color: #8a6d3b;
+  position: absolute;
+  z-index: 100;
+  top: 36px;
+  left: 0;
+  right: 0;
+  background-color: #fcf8e3;
   text-align: center;
   height: 35px;
   line-height: 35px;
@@ -125,6 +138,13 @@ html {
 .splitpane {
   position: absolute;
   top: 36px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.splitpane-error {
+  position: absolute;
+  top: 71px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -235,6 +255,11 @@ li.entry {
 .entry.focused {
   border-radius: 2px;
   background-color: rgba(255,240,6,0.4);
+}
+
+.CodeMirror .marked-error {
+  border-radius: 4px;
+  background-color: #FFCCCC ;
 }
 
 .entry.toggable::before {

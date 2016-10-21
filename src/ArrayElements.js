@@ -14,13 +14,14 @@ var ArrayElements = React.createClass({
     var Element = require('./Element');
     var focusPath = this.props.focusPath;
     var level = this.props.level;
-
+    
     var elements = this.props.array.map(
       (v, i) =>
         <Element
           key={i}
           focusPath={focusPath}
           deepOpen={this.props.deepOpen}
+          focusError={this.props.focusError}
           value={v}
           level={level}
         />

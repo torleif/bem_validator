@@ -5,19 +5,23 @@ require('./Object.es7.shim');
 var ASTOutput = require('./ASTOutput');
 var Editor = require('./Editor');
 var ErrorMessage = require('./ErrorMessage');
+var IssueMessage = require('./IssueMessage');
 var PasteDropTarget = require('./PasteDropTarget');
 var PubSub = require('pubsub-js');
 var React = require('react');
 var Snippet = require('./Snippet');
 var SplitPane = require('./SplitPane');
 var Toolbar = require('./Toolbar');
+var bem = require('./Bem');
 
 var getFocusPath = require('./getFocusPath');
+var getFocusBemPath = require('./getFocusBemPath');
 var css = require('css');
 var fs = require('fs');
 var keypress = require('keypress').keypress;
 
 var initialCode = fs.readFileSync(__dirname + '/codeExample.txt', 'utf8');
+var indexFromPos = require('./adapters/css').indexFromPos;
 
 function updateHashWithIDAndRevision(id, rev) {
   global.location.hash = '/' + id + (rev && rev !== 0 ? '/' + rev : '');
@@ -34,10 +38,14 @@ var App = React.createClass({
       forking: false,
       saving: false,
       ast: null,
+      astbem: null,
       focusPath: [],
+      focusBemPath: [],
       content: revision && revision.get('code') || initialCode,
       snippet: snippet,
       revision: revision,
+      issues: null,
+      focusError: null
     };
   },
 
@@ -76,6 +84,9 @@ var App = React.createClass({
       this._onFork();
     });
 
+    PubSub.subscribe('HIGHLIGHTERRORS', function(_, bemErrors) {
+      PubSub.publish('CM.HIGHLIGHTERRORS', bemErrors);
+    });
     PubSub.subscribe('HIGHLIGHT', function(_, astNode) {
       PubSub.publish('CM.HIGHLIGHT', astNode.range || astNode.position);
     });
@@ -96,7 +107,8 @@ var App = React.createClass({
         snippet: snippet,
         revision: revision,
         content: revision.get('code'),
-        focusPath: []
+        focusPath: [],
+        focusBemPath: []
       });
     }
   },
@@ -104,10 +116,13 @@ var App = React.createClass({
   _clearRevision: function() {
     this.setState({
       ast: css.parse(initialCode, {}),
+      astbem: bem.parse(initialCode, {}),
       focusPath: [],
+      focusBemPath: [],
       content: initialCode,
       snippet: null,
       revision: null,
+      issues: null
     });
   },
 
@@ -119,10 +134,13 @@ var App = React.createClass({
     }
 
     var ast;
+    var astbem;
     try {
       ast = css.parse(content, {});
+      astbem = bem.parse(content, {});
     }
     catch(e) {
+    //  console.log(e)
       this.setState({
         error: 'Syntax error: ' + e.message,
         content: content,
@@ -131,19 +149,36 @@ var App = React.createClass({
 
     if (ast) {
       var doc = this.refs.editor && this.refs.editor.getDocument();
+      //console.log( cursor ? getFocusPath(ast, cursor, [], doc): []);
       this.setState({
         content: content,
         ast: ast,
+        astbem: astbem,
         focusPath: cursor ? getFocusPath(ast, cursor, [], doc): [],
-        error: null
+        focusBemPath: cursor ? getFocusBemPath(astbem, cursor, [], doc): [],
+        error: null,
+        issues: astbem ? bem.bemValidationMessage() : null
       });
     }
+  },
+  buildFocusError: function(ast, cursorPos, doc) {
+      for (var i = 0; i < ast.Errors.length; i++) {
+          var error = ast.Errors[i];
+          var ix = indexFromPos(error.position.start, doc);
+          var iy = indexFromPos(error.position.end, doc);
+          if (cursorPos >= ix && cursorPos <= iy) {
+              return error;
+          }
+      }
+      return null;
   },
 
   onActivity: function(cursorPos) {
     var doc = this.refs.editor && this.refs.editor.getDocument();
     this.setState({
-      focusPath: getFocusPath(this.state.ast, cursorPos, [], doc)
+      focusPath: getFocusPath(this.state.ast, cursorPos, [], doc),
+      focusBemPath: getFocusBemPath(this.state.astbem, cursorPos, [], doc),
+      focusError: this.buildFocusError(this.state.astbem, cursorPos, doc)
     });
   },
 
@@ -227,17 +262,19 @@ var App = React.createClass({
           }
           canFork={!!revision}
         />
+        {this.state.issues ? <IssueMessage message={this.state.issues} /> : null}
         {this.state.error ? <ErrorMessage message={this.state.error} /> : null}
         <SplitPane
-          className="splitpane"
+          className={this.state.error || this.state.issues ? "splitpane splitpane-error" : "splitpane"}
           onResize={this._onResize}>
           <Editor
             ref="editor"
             value={this.state.content}
             onContentChange={this.onContentChange}
             onActivity={this.onActivity}
+            focusError={this.state.focusError}
           />
-          <ASTOutput focusPath={this.state.focusPath} ast={this.state.ast} />
+          <ASTOutput focusError={this.state.focusError} focusPath={this.state.focusPath} focusBemPath={this.state.focusBemPath} ast={this.state.ast} astbem={this.state.astbem} />
         </SplitPane>
       </PasteDropTarget>
     );

@@ -1,26 +1,25 @@
 /**
- * Paste some code here and explore the syntax tree
- * created by https://github.com/reworkcss/css. Enjoy!
- */
+*
+* BEM (Block Element Modifier) Validation Service.
+* Read more about BEM here: http://getbem.com/
+*
+* Copy and paste your CSS into this text area.
+*
+* You can also drag and drop your CSS file into your browser. Your parsed BEM
+* CSS structure will be shown on the right pane with any issues found. If an
+* issue has been found, a red cross will also appear in the gutter of the editor.
+*  Hover to reveal the what the error is, why it is an issue, and an example of
+* how to fix it. Clicking on the red cross (or the CSS rule) will highlight the
+* CSS rule and BEM violation details in the right pane of the validator.
+*
+* If you find any issues with the Validation Service, or want to talk about it,
+* create an issue in gitlab.
+*
+* This Validation Service was created from iamdustan/reworkcss_ast_explorer,
+* which is a fork from fkling/astexplorer. Thank you to the people who created
+* the libraries: codemirror, css, keypress, pubsub-js and react.
+*/
 
-* {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-body {
-  background: red;
-  font-size: 18px;
-}
-
-p {
-  color: purple !important;
-}
-
-@media screen and (min-width: 600px) {
-  body {
-    background: green;
-    font-size: 21px;
-  }
-}
-
+.block {}
+.block--element {}
+.block__modifier {}
