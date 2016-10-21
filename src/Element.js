@@ -167,6 +167,9 @@ var Element = React.createClass({
                 open = true;
                 enableHighlight = true;
             }
+            if (this.props.name == "Errors") {
+              focused = false;
+            }
         }
 
         if (isArray(value)) {
