@@ -1,5 +1,7 @@
 ## BEM (Block Element Modifier) Validation Service.
 
+[View a live demo of the BEM validator here](https://torleif.nz/bem/)
+
 **This is a fork of @iamdustan’s [iamdustan’s AST explorer](https://github.com/iamdustan/reworkcss_ast_explorer)**
 
 which is forked from
