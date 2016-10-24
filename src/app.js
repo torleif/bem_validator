@@ -93,6 +93,9 @@ var App = React.createClass({
     PubSub.subscribe('CLEAR_HIGHLIGHT', function(_, astNode) {
       PubSub.publish('CM.CLEAR_HIGHLIGHT', astNode && (astNode.range || astNode.position));
     });
+    PubSub.subscribe('MOVECURSOR', function(_, position) {
+      PubSub.publish('CM.MOVECURSOR', position);
+    });
   },
 
   _setRevision: function(snippet, revision) {

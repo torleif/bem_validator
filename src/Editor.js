@@ -221,33 +221,6 @@ var Editor = React.createClass({
                           }
                           (evt) ? el.dispatchEvent(evt) : (el.click && el.click());
                       }
-                      var bemelems = document.querySelectorAll('#bem > li > .value-body > li');
-                      for (var i = 0; i < bemelems.length; ++i) {
-                        var areaname = bemelems[i].querySelector('.key > .name').innerHTML;
-                        var curropen = bemelems[i].getAttribute('class').indexOf('open') !== -1;
-                        // close bem AST
-                        if(curropen && areaname == 'BEM') {
-                        //  clickfun(bemelems[i].querySelector('.key'));
-                        }
-                        // open Error list
-                        if(!curropen && areaname == 'Errors') {
-                        //  clickfun(bemelems[i].querySelector('.key'));
-                        }
-
-
-                        // open up the actual error
-                        /*var merrors = bemelems[i].querySelectorAll('ul > li');
-                        for (var im = 0; im < merrors.length; im++) {
-                          var errcurropen = merrors[im].getAttribute('class').indexOf('open') !== -1;
-                          var errfocused = merrors[im].getAttribute('class').indexOf('focused') !== -1;
-                          if(errcurropen && !errfocused) {
-                            clickfun(merrors[im].querySelector('.tokenName'));
-                          }
-                          if(!errcurropen && errfocused) {
-                            clickfun(merrors[im].querySelector('.tokenName'));
-                          }
-                        }*/
-                      }
                     }, false);
 
                     this.codeMirror.setGutterMarker(current_error.position.start.line - 1, "CodeMirror-lint-markers", msg);
@@ -276,6 +249,10 @@ var Editor = React.createClass({
                 }
             }),
 
+              PubSub.subscribe('CM.MOVECURSOR', (_, point) => {
+                this.codeMirror.setCursor(point.start.line-1, point.start.column);
+                console.log('change focus on error too lamo');
+              }),
             PubSub.subscribe('PANEL_RESIZE', () => {
                 if (this.codeMirror) {
                     this.codeMirror.refresh();

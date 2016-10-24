@@ -102,6 +102,9 @@ var Element = React.createClass({
     },
 
     _toggleClick: function(event) {
+        if('error' in this.props.value) {
+          PubSub.publish('MOVECURSOR', this.props.value.position);
+        }
         this.setState({
             open: event.shiftKey || !this.state.open,
             deepOpen: event.shiftKey,
