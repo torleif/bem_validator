@@ -251,7 +251,6 @@ var Editor = React.createClass({
 
               PubSub.subscribe('CM.MOVECURSOR', (_, point) => {
                 this.codeMirror.setCursor(point.start.line-1, point.start.column);
-                console.log('change focus on error too lamo');
               }),
             PubSub.subscribe('PANEL_RESIZE', () => {
                 if (this.codeMirror) {
