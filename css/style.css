@@ -12,6 +12,10 @@ html {
   right: 0;
 }
 
+.errortree .toggable .toggable {
+  display: none
+}
+
 .dropIndicator {
   position: fixed;
   top: 0;

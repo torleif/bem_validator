@@ -178,10 +178,32 @@ var App = React.createClass({
 
   onActivity: function(cursorPos) {
     var doc = this.refs.editor && this.refs.editor.getDocument();
+    var myfocuserror = this.buildFocusError(this.state.astbem, cursorPos, doc);
+    var myfocuspath = new Array();
+    var focuspathitr = getFocusPath(this.state.ast, cursorPos, [], doc);
+
+    // we exclude the declarations and selectors if selecting an error
+    if(myfocuserror) {
+      outer_loop:
+      for(var focuspath in focuspathitr) {
+        if(Array.isArray(focuspathitr[focuspath])) {
+          for(var checkrul in focuspathitr[focuspath]) {
+              var rule = focuspathitr[focuspath][checkrul];
+            if(typeof rule === 'object' && 'type' in rule && rule['type'] == "declaration") {
+    	          break outer_loop;
+            }
+          }
+        }
+        myfocuspath.push(focuspathitr[focuspath]);
+      }
+    } else {
+      myfocuspath = focuspathitr;
+    }
+    
     this.setState({
-      focusPath: getFocusPath(this.state.ast, cursorPos, [], doc),
+      focusPath: myfocuspath,
       focusBemPath: getFocusBemPath(this.state.astbem, cursorPos, [], doc),
-      focusError: this.buildFocusError(this.state.astbem, cursorPos, doc)
+      focusError: myfocuserror
     });
   },
 

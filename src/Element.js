@@ -169,6 +169,7 @@ var Element = React.createClass({
                 forceopen = true;
                 open = true;
                 enableHighlight = true;
+                focused = true;
             }
             if (this.props.name == "Errors") {
               focused = false;
@@ -274,12 +275,12 @@ var Element = React.createClass({
         span className = "p" >: < /span> < /
         span >:
             null;
-
         var classNames = cx({
             entry: true,
             focused: focused,
             toggable: showToggler,
-            open: open
+            open: open,
+            errortree: this.props.name == 'Errors'
         });
 
         return ( <
